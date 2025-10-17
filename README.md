@@ -7,6 +7,15 @@ It was built to provide a modern, developer-friendly, and efficient way to creat
 
 ---
 
+## Run instructions (Work in Progress)
+
+- To run **CubeGate**, you need Docker and Docker Compose installed.
+- The `docker-compose.yml` file has all the project core dependencies
+- Run **CubeGate** with:
+```
+sudo docker compose up -d
+```
+
 ## Overview
 
 CubeGate lets you easily create and manage Minecraft servers on your own infrastructure.  
