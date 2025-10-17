@@ -1,0 +1,37 @@
+import { Inter, Poppins } from "next/font/google";
+import { Box } from "lucide-react";
+import Link from "next/link";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  weight: "400",
+});
+
+export default function Navbar() {
+  return (
+    <nav
+      className={`bg-[#141b2a] w-full h-24 ${poppins.className} fixed drop-shadow-xl`}
+    >
+      <div className="w-[90%] mx-auto h-full flex items-center justify-between">
+        <Link href="/">
+          <p className={`font-inter text-2xl flex gap-2 items-center`}>
+            <Box />
+            CubeGate
+          </p>
+        </Link>
+        <div className="flex gap-4">
+          {/* <button className="px-4 py-2 bg-blue-500 rounded-xl text-md cursor-pointer hover:bg-blue-600">
+            Sign Up
+          </button> */}
+          <button className="px-4 py-2 bg-blue-500 rounded-xl text-md cursor-pointer hover:bg-blue-600 transition-all">
+            Log In
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
