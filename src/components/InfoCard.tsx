@@ -14,7 +14,7 @@ export default function InfoCard(props: props) {
           {props.icon}
         </div>
       </div>
-      <p className="text-center text-2xl">{props.title}</p>
+      <p className="text-center text-2xl text-white">{props.title}</p>
       <p className="text-center pt-4 text-zinc-400">{props.description}</p>
     </div>
   );
