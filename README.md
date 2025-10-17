@@ -21,8 +21,6 @@ sudo docker compose up -d
 CubeGate lets you easily create and manage Minecraft servers on your own infrastructure.  
 It aims to combine the simplicity of plug-and-play panels like Aternos with the power and flexibility of full Docker orchestration.
 
-Whether you just want to host a small personal server, or eventually build a larger cloud-based hosting service, CubeGate gives you the foundation — clean, modular, and self-contained.
-
 ---
 
 ## Core Concepts
