@@ -3,7 +3,7 @@ import { poppins } from "@/app/layout";
 import InfoCard from "./InfoCard";
 export default function Info() {
   return (
-    <section className={`${poppins.className} w-full h-screen bg-[#101522]`}>
+    <section className={`${poppins.className} w-full pb-24 bg-[#101522]`}>
       <div className="w-[80%] h-full mx-auto">
         <div className="h-full w-full grid grid-cols-12 gap-6 pt-24">
           <div className="col-span-12 md:col-span-4 h-84 bg-[#1f273b] rounded-xl">
