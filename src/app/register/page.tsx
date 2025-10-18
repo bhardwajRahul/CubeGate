@@ -4,20 +4,30 @@ import { Input } from "@/components/ui/input";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 import { z } from "zod";
+import { signUp } from "@/lib/actions/auth-actions";
 
 export default function Register() {
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const userSchema = z.object({
-    user: z.string(),
+    email: z.email("Invalid email address"),
     password: z.string().min(3, "Password must be at least 3 characters long"),
+    name: z.string().min(2, "Name must be at least 2 characters long"),
   });
 
-  const handleInfo = () => {
+  const handleRegister = async () => {
     try {
-      const userInfo = userSchema.parse({ user, password });
-      // ** TODO: handle successful registration here **
+      const userInfo = userSchema.parse({ email, password, name });
+      const result = await signUp(
+        userInfo.email,
+        userInfo.password,
+        userInfo.name
+      );
+      if (!result.user) {
+        alert("Registration failed!");
+      }
     } catch (e) {
       // validating input
       if (e instanceof z.ZodError && e.issues && e.issues.length > 0) {
@@ -40,13 +50,19 @@ export default function Register() {
             To start hosting your Minecraft server
           </p>
           <div className="flex justify-center items-center">
-            <div className="border border-zinc-700 h-48 w-96 md:h-72 md:w-172 bg-[#1c2536] rounded-2xl drop-shadow-xl flex flex-col justify-between">
+            <div className="border border-zinc-700 h-48 w-96 md:h-96 md:w-172 bg-[#1c2536] rounded-2xl drop-shadow-xl flex flex-col justify-between">
               <div className="px-8 pt-8">
-                User
+                Full Name
+                <Input
+                  className="border-zinc-500 mt-2 mb-4"
+                  placeholder="John Doe"
+                  onChange={(e) => setName(e.target.value)}
+                />
+                E-mail
                 <Input
                   className="border-zinc-500 mt-2 mb-4"
                   placeholder="admin@example.com"
-                  onChange={(e) => setUser(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 Password
                 <Input
@@ -58,10 +74,10 @@ export default function Register() {
               </div>
               <div className="gap-8 rounded-b-xl h-28 flex items-center justify-center">
                 <button
-                  onClick={handleInfo}
+                  onClick={async () => await handleRegister()}
                   className="px-8 py-4 text-xl bg-blue-500 rounded-xl text-md cursor-pointer hover:bg-blue-600 transition-all"
                 >
-                  Log In
+                  Register
                 </button>
               </div>
             </div>

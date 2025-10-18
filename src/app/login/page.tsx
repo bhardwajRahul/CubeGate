@@ -4,20 +4,24 @@ import { Input } from "@/components/ui/input";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 import { z } from "zod";
+import { signIn } from "@/lib/actions/auth-actions";
 
 export default function Login() {
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const userSchema = z.object({
-    user: z.string(),
+    email: z.email(),
     password: z.string().min(3, "Password must be at least 3 characters long"),
   });
 
-  const handleInfo = () => {
+  const handleInfo = async () => {
     try {
-      const userInfo = userSchema.parse({ user, password });
-      // ** TODO: handle successful login here **
+      const userInfo = userSchema.parse({ email, password });
+      const result = await signIn(userInfo.email, userInfo.password);
+      if (!result.user) {
+        alert("Login failed!");
+      }
     } catch (e) {
       // validating input
       if (e instanceof z.ZodError && e.issues && e.issues.length > 0) {
@@ -44,7 +48,7 @@ export default function Login() {
                 <Input
                   className="border-zinc-500 mt-2 mb-4"
                   placeholder="admin@example.com"
-                  onChange={(e) => setUser(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 Password
                 <Input
