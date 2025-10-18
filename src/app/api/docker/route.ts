@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDockerClient } from "@/lib/docker";
 const docker = getDockerClient();
 
-/* export const runtime = 'nodejs'; // força Node runtime (não Edge)
-export const dynamic = 'force-dynamic';
- */
 export async function POST(req: NextRequest) {
     const body = await req.json()
     return NextResponse.json({message: body},{ status: 200 });

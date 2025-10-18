@@ -1,20 +1,20 @@
 // NEVER USE CLIENT ON THESE PAGES
+import AddServerButton from "@/components/AddServerButton";
 import PanelSidebar from "@/components/PanelSidebar";
 import { redirect } from "next/navigation";
 
 export default function ServerPage({ session }: { session: any }) {
+  const handleModal = () => {};
   if (!session) {
     redirect("/login");
   }
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen relative">
       <PanelSidebar session={session} />
       <div className="flex-1 bg-[#0b1019] h-full p-8">
         <div className="flex justify-between mb-8">
           <h1 className="text-white text-2xl">Server Management</h1>
-          <button className="px-4 py-2 bg-blue-500 rounded-md cursor-pointer hover:bg-blue-500/50 transition-all">
-            Create New Server
-          </button>
+          <AddServerButton />
         </div>
         <div className="space-y-8">
           {/* Active servers table */}
