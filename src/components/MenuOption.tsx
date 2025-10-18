@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { House } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 interface props {
@@ -17,8 +16,8 @@ export default function MenuOption({ label, href, icon, className }: props) {
   return (
     <Link href={href} className={`w-[90%] ${className}`}>
       <div
-        className={`hover:bg-blue-600/30 transition-all rounded-md h-12 flex items-center px-4 ${
-          isCurrentPath ? "bg-blue-600/30" : ""
+        className={`hover:bg-[#14213c] transition-all rounded-md h-12 flex items-center px-4 ${
+          isCurrentPath ? "bg-[#14213c] text-blue-400" : ""
         }`}
       >
         {icon}

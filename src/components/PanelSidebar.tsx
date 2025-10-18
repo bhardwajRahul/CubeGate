@@ -11,7 +11,7 @@ export default async function PanelSidebar({ session }: { session?: any }) {
   }
   return (
     <>
-      <nav className="bg-[#141b2a] h-screen md:w-84 py-8 flex flex-col justify-between">
+      <nav className="bg-[#141b2a] h-screen md:w-80 py-8 flex flex-col justify-between drop-shadow-2xl">
         <div>
           <h2 className="text-white text-center text-2xl">Control Panel</h2>
           <div className="mt-10 flex flex-col items-center">

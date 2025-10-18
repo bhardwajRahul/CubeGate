@@ -1,8 +1,6 @@
-import PanelSidebar from "@/components/PanelSidebar";
-import options from "../../../../SidebarPages";
+import ServerPage from "@/app/pages/ServerPage";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import OverviewPage from "@/app/pages/OverviewPage";
 
 export default async function Server() {
   const session = await auth.api.getSession({
@@ -11,7 +9,7 @@ export default async function Server() {
 
   return (
     <>
-      <OverviewPage session={session} />
+      <ServerPage session={session} />
     </>
   );
 }
