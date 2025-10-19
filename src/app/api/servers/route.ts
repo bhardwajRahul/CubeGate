@@ -178,9 +178,6 @@ export async function GET() {
 }
 
 export async function DELETE(req: NextRequest) {
-
-    // FIX DATA NOT BEING DELETED WITH THE SERVER
-
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
@@ -201,10 +198,47 @@ export async function DELETE(req: NextRequest) {
     }
 
     const container = docker.getContainer(server.containerName);
-    await container.stop().catch(() => {});
-    await container.remove().catch(() => {});
 
-    // Remove volume (delete data from server!)
+    let mounts:
+      | Array<{ Type: "bind" | "volume"; Name?: string; Source?: string; Destination: string }>
+      | null = null;
+
+    try {
+      const inspect = await container.inspect();
+      mounts = (inspect?.Mounts ?? []).map((m: any) => ({
+        Type: m.Type,
+        Name: m.Name,
+        Source: m.Source,
+        Destination: m.Destination,
+      }));
+    } catch {
+      mounts = null;
+    }
+
+    await container.stop().catch(() => {});
+    await container.remove({ force: true, v: true }).catch(() => {});
+
+    // remove named volume if exists
+    if (server.volumeName) {
+      try {
+        await docker.getVolume(server.volumeName).remove({ force: true });
+      } catch {
+        // ignore
+      }
+    } else if (mounts) {
+      // fallback to remove /data volume
+      for (const m of mounts) {
+        const isData = m.Destination === "/data" || m.Destination?.startsWith("/data/");
+        if (!isData) continue;
+
+        if (m.Type === "volume" && m.Name) {
+          try {
+            await docker.getVolume(m.Name).remove({ force: true });
+          } catch {}
+        }
+      }
+    }
+
     const del = await prisma.server.deleteMany({
       where: { id: serverId, ownerId: userId },
     });
@@ -214,7 +248,10 @@ export async function DELETE(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { ok: true, message: `Server '${server.name}' (container ${server.containerName}) deleted.` },
+      {
+        ok: true,
+        message: `Server '${server.name}' (container ${server.containerName}) and data deleted.`,
+      },
       { status: 200 }
     );
   } catch (err: any) {
