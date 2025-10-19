@@ -1,21 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
-// Define your database connection here.
-// Make sure the docker compose is up to access your local cubegate database.
-
 datasource db {
   provider = "postgresql"
   url      = "postgresql://cubegate:cubegate@127.0.0.1:5432/cubegate"
-  //env("DATABASE_URL")
 }
 
 model User {
@@ -28,6 +18,7 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  servers       Server[]
 
   @@unique([email])
   @@map("user")
@@ -76,4 +67,53 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+enum ServerType {
+  VANILLA
+  FORGE
+  FABRIC
+  NEOFORGE
+  SPIGOT
+  PAPER
+}
+
+enum ServerStatus {
+  CREATING
+  RUNNING
+  STOPPED
+  ERROR
+}
+
+model Server {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  eula    Boolean @default(true)
+  version String
+
+  minMemoryMB String @default("2G")
+  maxMemoryMB String @default("4G")
+
+  serverType ServerType
+  status     ServerStatus @default(CREATING)
+
+  ipAddress String @db.Inet
+  port      Int
+
+  containerName String  @unique
+  volumeName    String  @unique
+  containerId   String? @unique
+  dockerImage   String  @default("itzg/minecraft-server:latest")
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([ipAddress, port])
+  @@index([ownerId, status])
+  @@map("servers")
 }

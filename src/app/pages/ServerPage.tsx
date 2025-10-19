@@ -1,4 +1,5 @@
 // NEVER USE CLIENT ON THESE PAGES
+import ActiveTable from "@/components/ActiveTable";
 import AddServerButton from "@/components/AddServerButton";
 import PanelSidebar from "@/components/PanelSidebar";
 import { redirect } from "next/navigation";
@@ -21,30 +22,7 @@ export default function ServerPage({ session }: { session: any }) {
           <div className=" bg-[#0c1320] rounded-md p-6">
             <h2 className="text-white text-lg mb-4">Active Servers</h2>
             <div className="overflow-x-auto">
-              <table className="w-full table-auto">
-                <thead>
-                  <tr className="text-zinc-400 text-sm">
-                    <th className="text-left p-4">Server Name</th>
-                    <th className="text-left p-4">Server IP</th>
-                    <th className="text-left p-4">Status</th>
-                    <th className="text-left p-4">Players</th>
-                    <th className="text-left p-4">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-[#0b1624]">
-                    <td className="p-4 text-white">My Survival Server</td>
-                    <td className="p-4 text-white">192.168.1.1:25565</td>
-                    <td className="p-4 text-green-400">Online</td>
-                    <td className="p-4 text-zinc-300">12 / 100</td>
-                    <td className="p-4">
-                      <button className="px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-500/80 transition-all">
-                        Manage
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <ActiveTable />
             </div>
           </div>
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDockerClient } from "@/lib/docker";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ enum versionType {
 }
 
 export interface Payload {
-  metadata: { serverName: string; description?: string; tags?: string[] };
+  metadata: { serverName: string; description?: string };
   versioning: { type: versionType; version: string; build?: string | null };
   runtime: {
     eula: boolean;
@@ -48,6 +49,15 @@ async function ensureImage(image: string) {
 }
 
 export async function POST(req: NextRequest) {
+    const session  = await auth.api.getSession({
+    headers : await headers(),
+});
+if(!session) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+}
   try {
     const body = (await req.json()) as Payload;
 
@@ -107,6 +117,27 @@ export async function POST(req: NextRequest) {
 
     const info = await container.inspect();
 
+    const portInfo = info.NetworkSettings.Ports["25565/tcp"]?.[0];
+    const hostIp   = portInfo?.HostIp ?? "0.0.0.0";
+
+    const newServer = await prisma.server.create({
+      data: {
+        name: body.metadata.serverName,
+        description: body.metadata.description ?? "",
+        containerId: info.Id,
+        eula: body.runtime.eula,
+        serverType: body.versioning.type,
+        version: body.versioning.version,
+        minMemoryMB: body.runtime.memory.init,
+        maxMemoryMB: body.runtime.memory.max,
+        ownerId: session.user.id,
+        containerName: containerName,
+        volumeName: volumeName,
+        port: hostPort,
+        ipAddress: hostIp,
+      },
+    });
+
     return NextResponse.json(
       {
         ok: true,
@@ -130,28 +161,63 @@ export async function POST(req: NextRequest) {
 export async function GET() {
     // Get user session
     const session  = await auth.api.getSession({
-    headers : await headers(),
-});
-/* if(!session){
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
-    );
-  } */
-  try {
-    const containers = await docker.listContainers({ all: true, filters: { label: ["com.cubegate.server"] } });
-    const servers = containers.map((container) => ({
-      containerId: container.Id,
-      containerName: container.Names[0].replace(/^\//, ""),
-    }));
+        headers : await headers(),
+    });
 
-    return NextResponse.json({ ok: true, servers,
-        user: session?.user.id
-     }, { status: 200 });
+    if(!session) {
+        return NextResponse.json(
+        { ok: false, error: "Unauthorized" },
+        { status: 401 }
+    )}
+
+    const servers = await prisma.server.findMany({
+        where: { ownerId: session.user.id },
+    });
+
+    return NextResponse.json({ ok: true, servers }, { status: 200 });
+}
+
+export async function DELETE(req: NextRequest) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  const userId = session.user.id;
+  const serverId = req.nextUrl.searchParams.get("id");
+  if (!serverId) {
+    return NextResponse.json({ ok: false, error: "Missing server ID" }, { status: 400 });
+  }
+
+  try {
+    const server = await prisma.server.findFirst({
+      where: { id: serverId, ownerId: userId },
+    });
+    if (!server) {
+      return NextResponse.json({ ok: false, error: "Server not found" }, { status: 404 });
+    }
+
+    const container = docker.getContainer(server.containerName);
+    await container.stop().catch(() => {});
+    await container.remove().catch(() => {});
+
+    // Remove volume (delete data from server!)
+    const del = await prisma.server.deleteMany({
+      where: { id: serverId, ownerId: userId },
+    });
+
+    if (del.count === 0) {
+      return NextResponse.json({ ok: false, error: "Server not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { ok: true, message: `Server '${server.name}' (container ${server.containerName}) deleted.` },
+      { status: 200 }
+    );
   } catch (err: any) {
     return NextResponse.json(
-      { ok: false, error: err?.message ?? "Error on server listing" },
-      { status: 400 }
+      { ok: false, error: err?.message ?? "Error deleting server" },
+      { status: 500 }
     );
   }
 }
