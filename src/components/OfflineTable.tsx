@@ -17,21 +17,19 @@ type Server = {
   port?: number;
 };
 
-export default function OnlineTable() {
+export default function InactiveTable() {
   const [servers, setServers] = useState<Server[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const keepOnline = (s: Server) =>
-    typeof s.status === "string"
-      ? s.status === "RUNNING" || s.status === "CREATING"
-      : Boolean(s.status);
+  const keepStopped = (s: Server) =>
+    typeof s.status === "string" ? s.status === "STOPPED" : !Boolean(s.status);
 
   const fetchServers = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await axios.get("/api/servers");
       const list: Server[] = data?.servers ?? [];
-      setServers(list.filter(keepOnline));
+      setServers(list.filter(keepStopped));
     } finally {
       setLoading(false);
     }
@@ -46,8 +44,8 @@ export default function OnlineTable() {
     await fetchServers();
   }
 
-  async function handleStopServer(serverId: string) {
-    await axios.post(`/api/stop`, { serverId });
+  async function handleStartServer(serverId: string) {
+    await axios.post(`/api/start`, { serverId });
     await fetchServers();
   }
 
@@ -74,7 +72,7 @@ export default function OnlineTable() {
             <td className="p-4 text-white">
               {server.ipAddress ?? "0.0.0.0"}:{server.port ?? 25565}
             </td>
-            <td className="p-4 text-green-400">
+            <td className="p-4 text-red-400">
               {typeof server.status === "boolean"
                 ? server.status
                   ? "RUNNING"
@@ -86,10 +84,10 @@ export default function OnlineTable() {
             <td className="p-4">
               <div className="flex justify-center gap-4">
                 <button
-                  onClick={() => handleStopServer(server.id)}
-                  className="cursor-pointer px-3 py-1 bg-yellow-500 rounded-md hover:bg-yellow-500/80 transition-all"
+                  onClick={() => handleStartServer(server.id)}
+                  className="cursor-pointer px-3 py-1 bg-green-700 rounded-md hover:bg-green-700/80 transition-all"
                 >
-                  Stop
+                  Start
                 </button>
                 <button
                   onClick={() => handleDeleteServer(server.id)}
@@ -105,7 +103,7 @@ export default function OnlineTable() {
         {servers.length === 0 && (
           <tr>
             <td className="p-4 text-zinc-400" colSpan={6}>
-              No running servers.
+              No stopped servers.
             </td>
           </tr>
         )}

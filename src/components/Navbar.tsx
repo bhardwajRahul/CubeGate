@@ -20,7 +20,7 @@ export default function Navbar() {
         <Link href="/">
           <p className={`font-inter text-2xl flex gap-2 items-center`}>
             <Box />
-            CubeGate
+            BlockGate
           </p>
         </Link>
         <div className="flex gap-4">
