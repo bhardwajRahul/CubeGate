@@ -10,7 +10,7 @@ export default function Hero() {
           Host your server and take full control of your gaming experience
         </h1>
         <p className="text-zinc-300 pt-8 text-center text-lg">
-          Experience seamless Minecraft hosting with CubeGate - where
+          Experience seamless Minecraft hosting with BlockGate - where
           performance meets simplicity.
         </p>
       </div>

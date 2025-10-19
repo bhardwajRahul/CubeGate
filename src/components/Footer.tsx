@@ -10,13 +10,13 @@ export default function Footer() {
         <div>
           <p className="text-zinc-400 pb-2">
             © <span className="font-semibold">{new Date().getFullYear()}</span>{" "}
-            CubeGate.
+            BlockGate.
           </p>
           <Link href="https://github.com/neozmmv/">
             <p className="text-zinc-400 text-sm">by Enzo Gutiérrez Pereira</p>
           </Link>
         </div>
-        <Link href={"https://github.com/neozmmv/CubeGate"}>
+        <Link href={"https://github.com/neozmmv/BlockGate"}>
           <svg
             role="img"
             viewBox="0 0 24 24"
