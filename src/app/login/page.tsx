@@ -31,6 +31,7 @@ export default function Login() {
         alert("An unexpected error occurred");
       }
     }
+    redirect("/panel");
   };
 
   return (
