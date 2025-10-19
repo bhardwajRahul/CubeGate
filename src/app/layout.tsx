@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CubeGate",
+  title: "BlockGate",
   description: "Minecraft Hosting Made Simple",
 };
 
