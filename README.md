@@ -4,11 +4,12 @@
 
 First of all, I want to really thank you all for the amazing support that **BlockGate** has got in such a short period of time! In just **12** hours, our project became the **#1** post of the day in r/selfhosted, and we got **50** stars in the project repository!
 
+<img width="760" height="111" alt="image" src="https://github.com/user-attachments/assets/184c3940-9f4c-42ed-a570-6589ca62305d" />
+
 **BlockGate** is an **open-source, self-hosted control panel** for managing and running **Minecraft servers** with Docker.  
 It was built to provide a modern, developer-friendly, and efficient way to create, manage, and monitor Minecraft instances, all from a simple and elegant web interface.
 
 > 🔒 Licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** — free and open for everyone, but protected against closed-source commercial forks.
-
 ---
 
 ## Run instructions (Work in Progress)
@@ -43,6 +44,12 @@ pnpm dev
 ```
 
 #### These are instructions for running in dev mode!
+
+## Control Panel
+
+<img width="1919" height="915" alt="image" src="https://github.com/user-attachments/assets/a78ac563-dd36-43e8-b4da-351e2c54a6f0" />
+This is the current state of the server control panel.
+
 
 ## Overview
 
