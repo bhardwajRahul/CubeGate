@@ -11,10 +11,34 @@ It was built to provide a modern, developer-friendly, and efficient way to creat
 
 - To run **CubeGate**, you need Docker and Docker Compose installed.
 - The `docker-compose.yml` file has all the project core dependencies
-- Run **CubeGate** with:
+- Follow the steps to run **CubeGate**:
+
+```
+git clone https://github.com/neozmmv/CubeGate
+```
+
+- Go to [BetterAuth](https://www.better-auth.com/docs/installation) and click on "Generate Secret"
+- Copy the generated secret to the `.env.example` file and rename it to `.env`
+
+- Start the PostgreSQL database with:
+
 ```
 sudo docker compose up -d
 ```
+
+- In the terminal, run:
+
+```
+pnpm dlx prisma migrate dev
+```
+
+and run the frontend with:
+
+```
+pnpm dev
+```
+
+#### These are instructions for running in dev mode!
 
 ## Overview
 
@@ -31,4 +55,3 @@ It aims to combine the simplicity of plug-and-play panels like Aternos with the 
 - **Future-Proof Foundation** — ready for scaling into a multi-node hosting environment later.
 - **Minecraft-Focused** — built exclusively for Minecraft servers, with an emphasis on simplicity, performance, and automation.
 - **Docker Based** — all Minecraft servers are isolated Docker containers based on the `itzg/minecraft-server` image.
----
