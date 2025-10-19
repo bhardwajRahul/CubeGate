@@ -11,7 +11,7 @@ export default async function Panel() {
   if (!session) {
     redirect("/login");
   } else {
-    redirect("/panel/overview");
+    redirect("/panel/server");
   }
   return (
     <>
