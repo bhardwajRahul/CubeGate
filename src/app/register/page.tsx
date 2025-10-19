@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { useState } from "react";
 import { z } from "zod";
 import { signUp } from "@/lib/actions/auth-actions";
+import { redirect } from "next/navigation";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -36,6 +37,7 @@ export default function Register() {
         alert("An unexpected error occurred");
       }
     }
+    redirect("/panel");
   };
 
   return (
