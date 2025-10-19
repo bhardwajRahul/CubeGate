@@ -46,6 +46,7 @@ export default function AddServerButton() {
     };
     const res = await axios.post("/api/servers", payload);
     console.log(res.data);
+    setIsModalOpen(false);
   };
 
   return (

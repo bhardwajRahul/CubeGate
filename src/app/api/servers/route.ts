@@ -178,6 +178,9 @@ export async function GET() {
 }
 
 export async function DELETE(req: NextRequest) {
+
+    // FIX DATA NOT BEING DELETED WITH THE SERVER
+
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });

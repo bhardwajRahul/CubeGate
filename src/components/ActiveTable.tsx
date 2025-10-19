@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 export default function ActiveTable() {
@@ -6,12 +7,19 @@ export default function ActiveTable() {
 
   useEffect(() => {
     const fetchServers = async () => {
-      const response = await fetch("/api/servers");
-      const data = await response.json();
-      setServers(data.servers);
+      const response = await axios.get("/api/servers");
+      setServers(response.data.servers);
     };
     fetchServers();
   }, []);
+
+  async function handleDeleteServer(serverId: string) {
+    const res = await axios.delete(`/api/servers?id=${serverId}`);
+    console.log(res.data);
+    // Refresh server list after deletion
+    const response = await axios.get("/api/servers");
+    setServers(response.data.servers);
+  }
 
   return (
     <>
@@ -46,8 +54,11 @@ export default function ActiveTable() {
                   {server.serverType}
                 </td>
                 <td className="p-4">
-                  <button className="px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-500/80 transition-all">
-                    Manage
+                  <button
+                    onClick={() => handleDeleteServer(server.id)}
+                    className="cursor-pointer px-3 py-1 bg-red-500 rounded-md hover:bg-red-500/80 transition-all"
+                  >
+                    Delete
                   </button>
                 </td>
               </>
