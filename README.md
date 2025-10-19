@@ -1,5 +1,9 @@
 # CubeGate — Self-Hosted Minecraft Server Management Platform
 
+### ⭐ Thank you!
+
+First of all, I want to really thank you all for the amazing support that **CubeGate** has got in such a short period of time! In just **12** hours, our project became the **#1** post of the day in r/selfhosted, and we got **50** stars in the project repository!
+
 **CubeGate** is an **open-source, self-hosted control panel** for managing and running **Minecraft servers** with Docker.  
 It was built to provide a modern, developer-friendly, and efficient way to create, manage, and monitor Minecraft instances, all from a simple and elegant web interface.
 
