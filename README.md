@@ -10,6 +10,7 @@ First of all, I want to really thank you all for the amazing support that **Bloc
 It was built to provide a modern, developer-friendly, and efficient way to create, manage, and monitor Minecraft instances, all from a simple and elegant web interface.
 
 > 🔒 Licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** — free and open for everyone, but protected against closed-source commercial forks.
+
 ---
 
 ## Run instructions (Work in Progress)
@@ -25,11 +26,13 @@ git clone https://github.com/neozmmv/BlockGate
 - Go to [BetterAuth](https://www.better-auth.com/docs/installation) and click on "Generate Secret"
 - Copy the generated secret to the `.env.example` file and rename it to `.env`
 
-- Start the PostgreSQL database with:
+- Start **BlockGate** with:
 
 ```
 sudo docker compose up -d
 ```
+
+## For development:
 
 - In the terminal, run:
 
@@ -37,7 +40,7 @@ sudo docker compose up -d
 pnpm dlx prisma migrate dev
 ```
 
-and run the frontend with:
+and run the web app with:
 
 ```
 pnpm dev
@@ -49,7 +52,6 @@ pnpm dev
 
 <img width="1919" height="915" alt="image" src="https://github.com/user-attachments/assets/a78ac563-dd36-43e8-b4da-351e2c54a6f0" />
 This is the current state of the server control panel.
-
 
 ## Overview
 
