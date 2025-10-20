@@ -1,4 +1,21 @@
 services:
+
+  blockgate:
+    image: neozmmv/blockgate:latest
+    container_name: blockgate
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://cubegate:cubegate@database:5432/cubegate
+      PORT: "3000"
+      MIGRATE: "true"
+      HOSTNAME: "0.0.0.0"
+      TZ: ${TZ:-UTC}
+    ports:
+      - "3000:3000"
+    networks: [postgres-network]
+    restart: unless-stopped
   database:
     image: postgres:16-alpine
     ports:
